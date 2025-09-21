@@ -11,6 +11,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.example.bluecrew.R
@@ -32,7 +33,7 @@ fun SplashScreen(navController: NavController) {
         contentAlignment = Alignment.Center
     ) {
         Image(
-            painter = rememberAsyncImagePainter(R.drawable.bg_landing),
+            painter = rememberAsyncImagePainter(R.drawable.landing),
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = Modifier.fillMaxSize()

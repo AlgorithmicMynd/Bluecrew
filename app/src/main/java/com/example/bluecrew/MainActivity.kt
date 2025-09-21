@@ -16,13 +16,13 @@ import com.example.bluecrew.ui.theme.BluecrewTheme
 
 import androidx.activity.compose.setContent
 import com.example.bluecrew.navigation.AppNavHost
-import com.example.bluecrew.ui.theme.BlueCarbonTheme
+import com.example.bluecrew.ui.theme.BluecrewTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            BlueCarbonTheme {
+            BluecrewTheme {
                 AppNavHost()
             }
         }
