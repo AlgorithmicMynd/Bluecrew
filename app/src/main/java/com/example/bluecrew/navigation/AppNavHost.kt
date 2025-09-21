@@ -23,7 +23,7 @@ fun AppNavHost() {
         composable("splash") { SplashScreen(navController) }
         composable("landing") { LandingScreen(navController) }
         composable("register") { RegisterScreen(navController) }
-        composable("login") { LoginScreen() }
+        composable("login") { LoginScreen(navController) }
         composable("dashboard") { DashboardScreen(navController) }
     }
 }
