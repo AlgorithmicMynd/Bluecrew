@@ -204,3 +204,4 @@ fun RoleChip(text: String, icon: Painter, isSelected: Boolean, onClick: () -> Un
 fun PreviewRegisterScreen() {
     RegisterScreen(navController = rememberNavController())
 }
+
