@@ -7,7 +7,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.bluecrew.ui.auth.LoginScreen
-import com.example.bluecrew.ui.auth.RegisterScreen
+import com.example.bluecrew.ui.auth.SignupUser
+import com.example.bluecrew.ui.auth.SignupOrg
 import com.example.bluecrew.ui.dashboard.DashboardScreen
 import com.example.bluecrew.ui.landing.LandingScreen
 import com.example.bluecrew.ui.splash.SplashScreen
@@ -22,7 +23,8 @@ fun AppNavHost() {
     ) {
         composable("splash") { SplashScreen(navController) }
         composable("landing") { LandingScreen(navController) }
-        composable("register") { RegisterScreen(navController) }
+        composable("SignupUser") { SignupUser(navController) }
+        composable("SignupOrg") { SignupOrg(navController) }
         composable("login") { LoginScreen(navController) }
         composable("dashboard") { DashboardScreen(navController) }
     }

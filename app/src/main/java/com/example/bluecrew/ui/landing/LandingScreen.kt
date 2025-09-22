@@ -185,7 +185,7 @@ fun LandingScreen(navController: NavController) {
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Button(
-                    onClick = { navController.navigate("register") },
+                    onClick = { navController.navigate("SignupOrg") },
                     modifier = Modifier.fillMaxWidth().height(56.dp),
                     shape = RoundedCornerShape(12.dp),
                     colors = ButtonDefaults.buttonColors(
@@ -193,8 +193,20 @@ fun LandingScreen(navController: NavController) {
                         contentColor = MaterialTheme.colorScheme.onPrimary
                     )
                 ) {
-                    Text("Sign Up", style = MaterialTheme.typography.titleMedium)
+                    Text("Sign Up as Organisation", style = MaterialTheme.typography.titleMedium)
                 }
+                Spacer(Modifier.height(16.dp))
+                Button(
+                        onClick = { navController.navigate("SignupUser") },
+                modifier = Modifier.fillMaxWidth().height(56.dp),
+                shape = RoundedCornerShape(12.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    contentColor = MaterialTheme.colorScheme.onPrimary
+                )
+                ) {
+                Text("Sign Up as Individual", style = MaterialTheme.typography.titleMedium)
+            }
 
                 Spacer(Modifier.height(16.dp))
 

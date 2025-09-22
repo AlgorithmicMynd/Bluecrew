@@ -7,8 +7,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.selection.selectable
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -20,25 +18,24 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.bluecrew.R
 
-// Assuming you have a drawable for the logo, e.g., R.drawable.blue_crew_logo
-// and the following imports are correctly set up.
-// You will need to add the Font Awesome or other icon library dependency if you want
-// to use the role icons.
-// For demonstration, we'll use a placeholder R.drawable.blue_crew_logo
+
 @Composable
-fun RegisterScreen(navController: NavController) {
+fun SignupUser(navController: NavController, authViewModel: AuthViewModel = viewModel()) {
     var name by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var confirmPassword by remember { mutableStateOf("") }
     var selectedRole by remember { mutableStateOf("NGO") }
+
+    // Collect the registration state from the ViewModel
+    val registrationState by authViewModel.registrationState.collectAsState()
 
     Column(
         modifier = Modifier
@@ -49,7 +46,6 @@ fun RegisterScreen(navController: NavController) {
         Spacer(Modifier.height(32.dp))
 
         // Logo
-        // Replace with your actual logo painter
         val logoPainter: Painter = painterResource(id = R.drawable.logo)
         Image(
             painter = logoPainter,
@@ -60,8 +56,6 @@ fun RegisterScreen(navController: NavController) {
                 .background(Color.White)
         )
 
-//        Spacer(Modifier.height(16.dp))
-
         Text(
             "Create Your Account",
             style = MaterialTheme.typography.titleLarge,
@@ -70,46 +64,20 @@ fun RegisterScreen(navController: NavController) {
         Spacer(Modifier.height(10.dp))
 
         // Name / Organization Field
-        Text("Name / Organization", style = MaterialTheme.typography.labelLarge, modifier = Modifier.fillMaxWidth())
+        Text("Name", style = MaterialTheme.typography.labelLarge, modifier = Modifier.fillMaxWidth())
         OutlinedTextField(
             value = name,
             onValueChange = { name = it },
-            placeholder = { Text("Your Name or Organization") },
-            modifier = Modifier.fillMaxWidth().padding(top = 4.dp),
-            shape = RoundedCornerShape(8.dp)
+            placeholder = { Text("Your Name ") },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 4.dp),
+            shape = RoundedCornerShape(8.dp),
+            enabled = registrationState !is RegistrationState.Loading
         )
 
         Spacer(Modifier.height(16.dp))
 
-        // Role Selection
-        Text("Your Role", style = MaterialTheme.typography.labelLarge, modifier = Modifier.fillMaxWidth())
-        Row(
-            modifier = Modifier.fillMaxWidth().padding(top = 4.dp),
-            horizontalArrangement = Arrangement.SpaceAround
-        ) {
-            // To use your own icons, place them in the res/drawable folder
-            // and replace the painterResource calls below with your icon names.
-            RoleChip(
-                text = "NGO",
-                icon = painterResource(id = R.drawable.ngo), // Replace with your icon
-                isSelected = selectedRole == "NGO",
-                onClick = { selectedRole = "NGO" }
-            )
-            RoleChip(
-                text = "Community",
-                icon = painterResource(id = R.drawable.user), // Replace with your icon
-                isSelected = selectedRole == "Community",
-                onClick = { selectedRole = "Community" }
-            )
-            RoleChip(
-                text = "Organisation",
-                icon = painterResource(id = R.drawable.panchayat), // Replace with your icon
-                isSelected = selectedRole == "Organisation",
-                onClick = { selectedRole = "Organisation" }
-            )
-        }
-
-        Spacer(Modifier.height(16.dp))
 
         // Email Field
         Text("Email", style = MaterialTheme.typography.labelLarge, modifier = Modifier.fillMaxWidth())
@@ -117,8 +85,11 @@ fun RegisterScreen(navController: NavController) {
             value = email,
             onValueChange = { email = it },
             placeholder = { Text("email@example.com") },
-            modifier = Modifier.fillMaxWidth().padding(top = 4.dp),
-            shape = RoundedCornerShape(8.dp)
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 4.dp),
+            shape = RoundedCornerShape(8.dp),
+            enabled = registrationState !is RegistrationState.Loading
         )
 
         Spacer(Modifier.height(16.dp))
@@ -130,8 +101,11 @@ fun RegisterScreen(navController: NavController) {
             onValueChange = { password = it },
             placeholder = { Text("Password") },
             visualTransformation = PasswordVisualTransformation(),
-            modifier = Modifier.fillMaxWidth().padding(top = 4.dp),
-            shape = RoundedCornerShape(8.dp)
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 4.dp),
+            shape = RoundedCornerShape(8.dp),
+            enabled = registrationState !is RegistrationState.Loading
         )
 
         Spacer(Modifier.height(16.dp))
@@ -143,27 +117,69 @@ fun RegisterScreen(navController: NavController) {
             onValueChange = { confirmPassword = it },
             placeholder = { Text("Confirm Password") },
             visualTransformation = PasswordVisualTransformation(),
-            modifier = Modifier.fillMaxWidth().padding(top = 4.dp),
-            shape = RoundedCornerShape(8.dp)
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 4.dp),
+            shape = RoundedCornerShape(8.dp),
+            enabled = registrationState !is RegistrationState.Loading
         )
 
-        Spacer(Modifier.height(10.dp))
+        Spacer(Modifier.height(24.dp))
 
-        Button(
-            onClick = { navController.navigate("dashboard") },
-            modifier = Modifier.fillMaxWidth().height(48.dp),
-            shape = RoundedCornerShape(8.dp)
+        // This Box will manage showing the button, loading spinner, or error message
+        Box(
+            modifier = Modifier.fillMaxWidth(),
+            contentAlignment = Alignment.Center
         ) {
-            Text("Sign Up")
+            when (val state = registrationState) {
+                is RegistrationState.Loading -> {
+                    CircularProgressIndicator()
+                }
+                is RegistrationState.Success -> {
+                    LaunchedEffect(Unit) {
+                        navController.navigate("dashboard") {
+                            popUpTo("login") { inclusive = true }
+                        }
+                    }
+                }
+                is RegistrationState.Error -> {
+                    Text(
+                        text = state.message,
+                        color = MaterialTheme.colorScheme.error,
+                        style = MaterialTheme.typography.bodyMedium,
+                    )
+                    // Reset state after a delay so the user can try again
+                    LaunchedEffect(state.message) {
+                        kotlinx.coroutines.delay(3000)
+                        authViewModel.resetState()
+                    }
+                }
+                is RegistrationState.Idle -> {
+                    Button(
+                        onClick = {
+                            authViewModel.register(name, email, password, confirmPassword)
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(48.dp),
+                        shape = RoundedCornerShape(8.dp)
+                    ) {
+                        Text("Sign Up")
+                    }
+                }
+            }
         }
-//
-//        Spacer(Modifier.height(5.dp))
+
+        Spacer(Modifier.height(16.dp))
 
         Row(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text("Already have an account?", style = MaterialTheme.typography.bodyMedium)
-            TextButton(onClick = { navController.navigate("login") }) {
+            TextButton(
+                onClick = { navController.navigate("login") },
+                enabled = registrationState !is RegistrationState.Loading
+            ) {
                 Text("Login")
             }
         }
@@ -201,7 +217,6 @@ fun RoleChip(text: String, icon: Painter, isSelected: Boolean, onClick: () -> Un
 
 @Preview(showBackground = true)
 @Composable
-fun PreviewRegisterScreen() {
-    RegisterScreen(navController = rememberNavController())
+fun PreviewSignupUser() {
+    SignupUser(navController = rememberNavController())
 }
-

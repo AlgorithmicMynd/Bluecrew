@@ -6,7 +6,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.bluecrew.ui.splash.SplashScreen
 import com.example.bluecrew.ui.auth.LoginScreen
-import com.example.bluecrew.ui.auth.RegisterScreen
+import com.example.bluecrew.ui.auth.SignupUser
+import com.example.bluecrew.ui.auth.SignupOrg
 import com.example.bluecrew.ui.settings.SettingsScreen
 import com.example.bluecrew.ui.dashboard.DashboardScreen
 import com.example.bluecrew.ui.landing.LandingScreen
@@ -30,8 +31,11 @@ fun SetupNavGraph() {
         composable("login") {
             LoginScreen(navController = navController)
         }
-        composable("register") {
-            RegisterScreen(navController = navController)
+        composable("SignupUser") {
+            SignupUser(navController = navController)
+        }
+        composable("SignupOrg") {
+            SignupOrg(navController = navController)
         }
         composable("dashboard") {
             DashboardScreen(navController = navController)
